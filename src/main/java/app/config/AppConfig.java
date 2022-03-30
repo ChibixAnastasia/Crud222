@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -12,10 +13,10 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionManager;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.spi.PersistenceProvider;
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -23,9 +24,38 @@ import java.util.Properties;
 @PropertySource("classpath:db.properties")
 @ComponentScan(value = "java")
 public class AppConfig {
+    @Autowired
+    private Environment environment;
 
-    //private Environment environment;
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(getDataSource());
+        HibernateJpaVendorAdapter hibernateAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(hibernateAdapter);
+        em.setPackagesToScan("app");
+        return em;
+    }
 
+    @Bean
+    public DataSource getDataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setUrl(environment.getRequiredProperty("url"));
+        dataSource.setDriverClassName(environment.getRequiredProperty("driver"));
+        dataSource.setUsername(environment.getRequiredProperty("username"));
+        dataSource.setPassword(environment.getRequiredProperty("password"));
+        return dataSource;
+    }
+
+    @Bean
+    public TransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+        JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
+        jpaTransactionManager.setDataSource(getDataSource());
+        jpaTransactionManager.setEntityManagerFactory(entityManagerFactory);
+        return jpaTransactionManager;
+    }
+
+/*
     @Bean
     public DataSource getDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -36,11 +66,12 @@ public class AppConfig {
         return dataSource;
     }
 
+
     @Bean
     public EntityManagerFactory entityManagerFactory(){
         final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(getDataSource() );
-        em.setPackagesToScan( "models" );
+        em.setPackagesToScan("app/models");
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         em.setJpaProperties(additionalProperties());
@@ -72,6 +103,6 @@ public class AppConfig {
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
 
         return properties;
-    }
+    }*/
 
 }

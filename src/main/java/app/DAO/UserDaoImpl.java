@@ -1,12 +1,10 @@
-package DAO;
+package app.DAO;
 
-import models.User;
+import app.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.util.List;
 
 @Repository
@@ -17,13 +15,14 @@ public class UserDaoImpl implements UserDao{
 
 
     @Override
-    public void addUser(User user) {
-        manager.getTransaction().begin();
-        manager.persist(user);
-        manager.getTransaction().commit();
-        manager.close();
+    public void addUser(String name, int age) {
+        manager.persist(new User(name, age));
     }
 
+    @Override
+    public void addUser(User user){
+        manager.persist(user);
+    }
     @Override
     public List<User> getAllUsers() {
         List<User> list =  manager.createQuery("SELECT user FROM User user", User.class).getResultList();
@@ -32,8 +31,8 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public User getUser(long id){
-       User user = manager.find(User.class, new Long(id));
-       manager.detach(user);
+       User user = manager.find(User.class, id);
+       //manager.detach(user);
         return user;
     }
 
@@ -41,16 +40,21 @@ public class UserDaoImpl implements UserDao{
     public void deleteUser(long id) {
         User user = manager.find(User.class, id);
         manager.remove(user);
-        manager.getTransaction().commit();
-        manager.close();
+
 
     }
 
     @Override
-    public void updateUser(User user) {
-        manager.detach(user);
-        manager.getTransaction().begin();
+    public void updateUser( User user) {
+       // manager.detach(user);
         manager.merge(user);
-        manager.getTransaction().commit();
+    }
+
+    @Override
+    public void updateUser(String name, int age, long id){
+        User user = manager.find(User.class, id);
+        user.setName(name);
+        user.setAge(age);
+        manager.merge(user);
     }
 }

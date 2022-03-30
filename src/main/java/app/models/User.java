@@ -1,10 +1,10 @@
-package models;
+package app.models;
 
 import javax.persistence.*;
 
 
 @Entity
-@Table(name="USERS")
+@Table(name="people")
 public class User {
     @Id
     @Column(name = "ID", nullable = false)
@@ -18,11 +18,11 @@ public class User {
     public User() {
     }
 
-    public User(String name, int age, long id) {
+    public User(String name, int age) {
         this.name = name;
         this.age = age;
-        this.id = id;
     }
+
 
     public String getName() {
         return name;

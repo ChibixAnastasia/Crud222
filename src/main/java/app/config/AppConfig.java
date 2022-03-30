@@ -55,54 +55,5 @@ public class AppConfig {
         return jpaTransactionManager;
     }
 
-/*
-    @Bean
-    public DataSource getDataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/");
-        dataSource.setUsername("root");
-        dataSource.setPassword("nastya567");
-        return dataSource;
-    }
-
-
-    @Bean
-    public EntityManagerFactory entityManagerFactory(){
-        final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(getDataSource() );
-        em.setPackagesToScan("app/models");
-        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        em.setJpaVendorAdapter(vendorAdapter);
-        em.setJpaProperties(additionalProperties());
-
-        return (EntityManagerFactory) em;
-    }
-
-    @Bean
-    public EntityManager getEntityManager(){
-        return entityManagerFactory().createEntityManager();
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager() {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactory().createEntityManager().getEntityManagerFactory());
-
-        return transactionManager;
-    }
-
-    @Bean
-    public PersistenceExceptionTranslationPostProcessor exceptionTranslation(){
-        return new PersistenceExceptionTranslationPostProcessor();
-    }
-
-    Properties additionalProperties() {
-        Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-
-        return properties;
-    }*/
 
 }

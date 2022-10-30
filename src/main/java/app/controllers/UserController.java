@@ -1,116 +1,62 @@
 package app.controllers;
 
 import app.models.User;
+import app.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import app.service.UserService;
 
 @Controller
+//@RequestMapping("/")
 public class UserController {
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Autowired(required = true)
-    public void setUserService(UserService service) {
+    public void setUserService(UserServiceImpl service) {
         userService = service;
     }
 
-    @GetMapping("/users")
-    public String index(Model model) {
+    @RequestMapping("/admin")
+    public String admin(Model model) {
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("newUser", new User());
-        return "users";
+        return "admin";
     }
 
-    @GetMapping("/{id}")
+    @RequestMapping("/{id}")
     public String getUser(@PathVariable("id") long id, Model model) {
         model.addAttribute("user", userService.getUser(id));
-        return "/getUser";
+        return "user";
     }
 
-    @GetMapping("/newUser")
+    @RequestMapping("/newUser")
     public String newUser(Model model) {
+        model.addAttribute("user", new User());
         return "newUser";
     }
 
-    @PostMapping()
-    public String create(@ModelAttribute("user") User user) {
+    @RequestMapping("/saveUser")
+    public String save(@ModelAttribute("user") User user) {
         userService.addUser(user);
-        return "redirect:/users";
+        return "redirect: /admin";
     }
 
-    @GetMapping("/{id}/updateUser")
-    public String update(@PathVariable("id") long id, Model model) {
+    @RequestMapping("/updateUser")
+    public String update(@RequestParam("userIDinRequestParam") long id, Model model) {
         model.addAttribute("user", userService.getUser(id));
-        return "/updateUser";
+        return "newUser";
     }
 
     @PatchMapping("/{id}")
     public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") long id) {
         userService.updateUser(user);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable("id") long id) {
         userService.deleteUser(id);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
-
-   /* @GetMapping
-    public String getAllUsers(Model model){
-        model.addAttribute("list", userService.getAllUsers());
-        model.addAttribute("user", new User());
-        return "users";
-    }
-
-    @GetMapping("/{id}")
-    public String getUserByID(@PathVariable("id") long id, Model model){
-        model.addAttribute("list", userService.getUser(id));
-        return "index";
-    }
-
-    @PostMapping()
-    public String create(@ModelAttribute("name") User user) {
-        userService.addUser(user);
-        return "redirect:/users";
-    }
-
-    @GetMapping("/addUser")
-    public String addUser(Model model, @PathVariable("id") int id) {
-        model.addAttribute("person", userService.getUser(id));
-        return "users";
-    }
-
-    @GetMapping("/updateUser")
-    public String updateUser(@PathVariable("id") long id, Model model ){
-        model.addAttribute("user", userService.getUser(id));
-        model.addAttribute("newuser", new User());
-        return "redirect:/users";
-    }
-
-    @GetMapping("/delete/{id}")
-    public String deleteUserID(@PathVariable("id") long id){
-     userService.deleteUser(id);
-        return "redirect:/users";
-    }
-
-    @PatchMapping("/{id}")
-    public String update(@ModelAttribute("person") User user, @PathVariable("id") long id) {
-        userService.updateUser( user);
-        return "redirect:/people";
-    }
-
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") long id) {
-        userService.deleteUser(id);
-        return "redirect:/people";
-    }*/
-
-
-
-
-
-
 }

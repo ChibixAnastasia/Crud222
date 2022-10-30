@@ -22,7 +22,7 @@ import java.util.Properties;
 
 @Configuration
 @PropertySource("classpath:db.properties")
-@ComponentScan(value = "java")
+@ComponentScan(value = "app")
 public class AppConfig {
     @Autowired
     private Environment environment;

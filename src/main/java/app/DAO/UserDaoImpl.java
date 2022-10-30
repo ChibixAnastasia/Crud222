@@ -14,10 +14,6 @@ public class UserDaoImpl implements UserDao{
     private EntityManager manager;
 
 
-    @Override
-    public void addUser(String name, int age) {
-        manager.persist(new User(name, age));
-    }
 
     @Override
     public void addUser(User user){

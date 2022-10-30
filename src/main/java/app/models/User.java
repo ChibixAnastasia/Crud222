@@ -4,15 +4,15 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name="people")
+@Table(name="users")
 public class User {
     @Id
-    @Column(name = "ID", nullable = false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="NAME")
+    @Column(name="name")
     private String name;
-    @Column(name="AGE")
+    @Column(name="age")
     private int age;
 
     public User() {

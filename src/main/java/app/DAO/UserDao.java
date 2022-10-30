@@ -5,7 +5,6 @@ import app.models.User;
 import java.util.List;
 
 public interface UserDao {
-     void addUser(String name, int age);
      void addUser(User user);
      List<User> getAllUsers();
      User getUser(long id);

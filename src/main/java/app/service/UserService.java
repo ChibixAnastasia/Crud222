@@ -10,8 +10,6 @@ import java.util.List;
 public interface UserService {
 
     @Transactional
-    void addUser(String name, int age);
-    @Transactional
     void addUser(User user);
     @Transactional
     List<User> getAllUsers();

@@ -17,11 +17,6 @@ public class UserServiceImpl implements UserService{
         this.userDao = userDao;
     }
 
-    @Override
-    @Transactional
-    public void addUser(String name, int age) {
-        this.userDao.addUser(name, age);
-    }
 
     @Override
     @Transactional
